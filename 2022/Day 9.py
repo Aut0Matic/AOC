@@ -1,70 +1,35 @@
-# Open file
-f = open('Day 9.txt', 'r')
-instructions = f.read().split('\n')
-f.close()
-
-# Create a grid to mark where the tail has visited
-ROWS = 2000
-COLS = 2000
-
-grid = [[0 for i in range(ROWS)] for j in range(COLS)]
-
-headx = 1000
-heady = 1000
-tailx = 1000
-taily = 1000
-grid[tailx][taily] = 1
-
-# Iterate through instructions
-for instruction in instructions:
-    # Seperate instruction into a direction and how many times we go that way
-    dir = instruction[0]
-    times = int(instruction[2:])
+def solve(instructions, length):
+    # Setup positions
+    xs = [0] * length;
+    ys = [0] * length;
     
-    # Loop times:
-    for i in range(times):
-        hx = headx
-        hy = heady
-        if dir == 'R':
-            headx+=1
-        elif dir =='L':
-            headx-=1
-        elif dir=='U':
-            heady+=1
-        elif dir=='D':
-            heady-=1
-        else:
-            print('no direction!')
+    # Dictionary containing tuples of what location has been visited
+    tail_visited = { (xs[-1], ys[-1]) }
+    
+    # iterate through moves:
+    for(mx, my), distance in instructions:
+        for _ in range(distance):
+            
+            # Move the head
+            xs[0] += mx
+            ys[0] += my
+            
+            for i in range(length - 1):
+                dx = xs[i+1] - xs[i]
+                dy = ys[i+1] - ys[i]
+                
+                # Diagonal movement
+                if abs(dx) == 2 or abs(dy) == 2:
+                    xs[i+1] = xs[i] + int(dx/2)
+                    ys[i+1] = ys[i] + int(dy/2)
+            
+            tail_visited.add( (xs[-1], ys[-1]))
+            
+    return(len(tail_visited))
+            
+dirs = {'L': (-1,0), 'R': (1,0), 'U': (0,-1), 'D': (0,1)}
 
-        # SAME TILE
-        if headx == tailx and heady==taily:
-            pass
-        
-        # Dragged directly up or down
-        elif headx == tailx:
-            if heady-taily==-2:
-                taily-=1
-            elif heady-taily==2:
-                taily+=1
-        
-        # Dragged side to side
-        elif heady == taily:
-            if headx-tailx==-2:
-                tailx-=1
-            elif headx-tailx==2:
-                tailx+=1
-        
-        # No change
-        elif abs(headx-tailx) + abs(heady-taily) <= 2:
-            pass
+instructions = [(dirs[line[0]], int(line[1:])) for line in open('Day 9.txt')]
 
-        # Diagonal movements
-        else:
-            tailx = hx
-            taily = hy
-        
-        # Update grid
-        grid[tailx][taily] = 1
-        
-# Solution
-print('Part 1', sum([i.count(1) for i in grid]))
+print('Part 1:', solve(instructions, 2))
+print('Part 2:', solve(instructions, 10))
