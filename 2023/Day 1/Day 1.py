@@ -20,24 +20,24 @@ with open(file_path, 'r') as file:
     
     for line in file:
         stripped = line.strip()
-        print(stripped)
+        # print(stripped)
         stripped = reLine(stripped)
-        print(stripped)
+        # print(stripped)
         length = int(len(stripped))
         for i in range(0,length):
             if stripped[i].isdigit():
                 low = stripped[i]
-                print("low: ",low)
+                # print("low: ",low)
                 break
         
         for i in range(length-1, -1, -1):
             if stripped[i].isdigit():
                 high = stripped[i]
-                print("high: ",high)
+                # print("high: ",high)
                 break
             
         pair = int(str(low) + str(high))
-        print(pair)
+        # print(pair)
         
         sum += pair
         
