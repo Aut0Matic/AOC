@@ -15,7 +15,6 @@ for index, line in enumerate(matrix, start = 0):
     a = a[1:] # winning numbers
     b = re.findall('\d+', b) # card numbers
     
-    
     score = matches = 0
     
     # Search through the numbers in this card
