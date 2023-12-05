@@ -31,7 +31,7 @@ for index, line in enumerate(matrix, start = 0):
                 score = 1
             else:
                 score = score * 2
-    r+= score
+    r += score
 
     # Update the number of each card
     for i in range(1,matches+1):
